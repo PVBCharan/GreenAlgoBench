@@ -8,13 +8,26 @@ Automated experiment runner for algorithm benchmarking.
 """
 import sys
 import os
+
+# Add project root to Python path
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+from carbon.carbon_calculator import enrich_with_energy_and_carbon as compute_carbon
+
+import sys
+import os
 import importlib
 import random
 import json
 from collections import defaultdict
 
+
 import psutil
 import time
+
+# Import carbon computation function
+from carbon.carbon_calculator import enrich_with_energy_and_carbon as compute_carbon
 
 # Add parent directory to sys.path for imports
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -43,7 +56,8 @@ def profile_algorithm(func, *args, **kwargs):
 	elapsed = time.perf_counter() - start
 	cpu_after = process.cpu_percent(interval=None)
 	mem_after = process.memory_info().rss
-	cpu_used = max(0.0, min(cpu_used, 400.0))
+	# Calculate CPU and memory usage deltas
+	cpu_used = max(0.0, min(cpu_after - cpu_before, 400.0))
 	mem_used = max(mem_after - mem_before, 1024)  # minimum 1 KB
 	return result, elapsed, cpu_used, mem_used
 
@@ -63,7 +77,8 @@ def generate_datasets(category, size, seed):
 
 def main():
 	results = defaultdict(lambda: defaultdict(dict))
-	for category, algos in experiment_config.ALGORITHM_CATEGORIES.items():
+	for category in experiment_config.ALGORITHM_CATEGORIES:
+		algos = experiment_config.ALGORITHM_CATEGORIES[category]
 		for size in experiment_config.DATASET_SIZES:
 			# Generate dataset once per size/category for fairness
 			if category == 'sorting':
@@ -88,14 +103,36 @@ def main():
 				avg_time = sum(r['time'] for r in run_stats) / experiment_config.NUM_RUNS
 				avg_cpu = sum(r['cpu'] for r in run_stats) / experiment_config.NUM_RUNS
 				avg_mem = sum(r['mem'] for r in run_stats) / experiment_config.NUM_RUNS
-				results[category][algo_name][size] = {
+
+				# Compute energy and carbon using the averaged metrics
+				# Convert memory from bytes to MB for carbon input
+				carbon_input = {
+					'time': avg_time,  # seconds
+					'mem': avg_mem     # bytes
+				}
+				enriched = compute_carbon(carbon_input)
+
+				# Store size as string for JSON compatibility and downstream code
+				results[category][algo_name][str(size)] = {
 					'avg_time': avg_time,
 					'avg_cpu': avg_cpu,
 					'avg_mem': avg_mem,
+					'energy_kwh': enriched.get('energy_kwh', 0),
+					'carbon_gco2': enriched.get('carbon_gco2', 0),
 					'runs': run_stats
 				}
 				print(f"Category: {category}, Algorithm: {algo_name}, Size: {size}")
-				print(f"  Avg Time: {avg_time:.6f}s, Avg CPU: {avg_cpu:.2f}%, Avg Mem: {avg_mem/1024:.2f} KB\n")
+				print(f"  Avg Time: {avg_time:.6f}s, Avg CPU: {avg_cpu:.2f}%, Avg Mem: {avg_mem/1024:.2f} KB")
+				print(f"  Energy: {enriched.get('energy_kwh', 0):.6e} kWh, "f"Carbon: {enriched.get('carbon_gco2', 0):.6f} gCO2\n")
+
+                
+	# Debug: print a preview of the results structure
+	try:
+		preview = json.dumps(results, indent=2)
+		print("[DEBUG] Results preview (first 1000 chars):\n", preview[:1000])
+	except Exception as e:
+		print("[DEBUG] Could not print results preview:", e)
+
 	# Store raw results as JSON
 	out_path = os.path.join(os.path.dirname(__file__), '../data/experiments/raw_results.json')
 	os.makedirs(os.path.dirname(out_path), exist_ok=True)
