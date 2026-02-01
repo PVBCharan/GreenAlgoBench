@@ -1,0 +1,1 @@
+# Calculates carbon emissions (placeholder)

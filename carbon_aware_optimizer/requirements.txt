@@ -1,0 +1,2 @@
+# Python dependencies placeholder
+# Add psutil, scikit-learn, qiskit, streamlit/dash, matplotlib, etc. as needed
