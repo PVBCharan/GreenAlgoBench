@@ -1,73 +1,460 @@
-/* Tailwind CSS v4 uses a CSS-first approach. No CLI init or config files needed. */
+/* Tailwind CSS v4 - Enhanced Design System for GreenAlgoBench */
 @import "tailwindcss";
 
-/* Base styles */
+/* ============================================
+   CSS CUSTOM PROPERTIES (DESIGN TOKENS)
+   ============================================ */
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  /* Colors */
+  --color-primary: #22c55e;
+  --color-primary-dark: #16a34a;
+  --color-primary-light: #86efac;
+  --color-accent: #3b82f6;
+  --color-accent-dark: #2563eb;
+
+  /* Backgrounds */
+  --bg-dark: #0f172a;
+  --bg-dark-secondary: #1e293b;
+  --bg-light: #f8fafc;
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  --gradient-dark: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+  --gradient-glow: radial-gradient(ellipse at center, rgba(34, 197, 94, 0.15) 0%, transparent 70%);
+
+  /* Typography */
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
   font-weight: 400;
-  color-scheme: light dark;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-glow: 0 0 40px rgba(34, 197, 94, 0.3);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Spacing Scale */
+  --space-section: 6rem;
+  --space-section-mobile: 4rem;
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #f8fafc;
-  background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
-  background-size: 32px 32px;
+  background-color: var(--bg-light);
+  color: #1e293b;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.dark-card {
-  background: linear-gradient(145deg, #0f172a, #1e293b);
-  border: 1px solid #334155;
+/* Ensure proper layout structure */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Custom scrollbar */
+/* ============================================
+   LAYOUT UTILITIES
+   ============================================ */
+.section-padding {
+  padding-top: var(--space-section);
+  padding-bottom: var(--space-section);
+}
+
+@media (max-width: 768px) {
+  .section-padding {
+    padding-top: var(--space-section-mobile);
+    padding-bottom: var(--space-section-mobile);
+  }
+}
+
+.container-narrow {
+  max-width: 48rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.container-default {
+  max-width: 64rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.container-wide {
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/* ============================================
+   GLASSMORPHISM UTILITIES
+   ============================================ */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-dark {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+/* ============================================
+   GRADIENT BACKGROUNDS
+   ============================================ */
+.bg-gradient-hero {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-gradient-hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at 30% 20%, rgba(34, 197, 94, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(59, 130, 246, 0.08) 0%, transparent 50%);
+  animation: gradient-shift 15s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes gradient-shift {
+
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  33% {
+    transform: translate(2%, 2%) rotate(1deg);
+  }
+
+  66% {
+    transform: translate(-1%, 1%) rotate(-1deg);
+  }
+}
+
+/* ============================================
+   GLOW EFFECTS
+   ============================================ */
+.glow-green {
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.3),
+    0 0 40px rgba(34, 197, 94, 0.1);
+}
+
+.glow-green-hover:hover {
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.4),
+    0 0 60px rgba(34, 197, 94, 0.2);
+}
+
+.glow-blue {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3),
+    0 0 40px rgba(59, 130, 246, 0.1);
+}
+
+/* ============================================
+   CARD HOVER EFFECTS
+   ============================================ */
+.card-hover {
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg), 0 0 30px rgba(34, 197, 94, 0.1);
+}
+
+/* ============================================
+   ANIMATION KEYFRAMES
+   ============================================ */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+    opacity: 1;
+  }
+
+  50% {
+    box-shadow: 0 0 40px rgba(34, 197, 94, 0.5);
+    opacity: 0.9;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out forwards;
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+   ============================================ */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: #f1f5f9;
-}
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
   border-radius: 4px;
 }
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #94a3b8, #64748b);
+  border-radius: 4px;
+}
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: linear-gradient(180deg, #64748b, #475569);
 }
 
-/* Custom button styles (fallback for non-Tailwind buttons) */
-button {
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+/* ============================================
+   FOCUS STATES (ACCESSIBILITY)
+   ============================================ */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   SELECTION
+   ============================================ */
+::selection {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: #0f172a;
+}
+
+/* ============================================
+   TEXT GRADIENT
+   ============================================ */
+.text-gradient-green {
+  background: linear-gradient(135deg, #22c55e 0%, #86efac 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-blue {
+  background: linear-gradient(135deg, #3b82f6 0%, #93c5fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================
+   RESPONSIVE TABLE
+   ============================================ */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ============================================
+   SPACING UTILITIES
+   ============================================ */
+.gap-section {
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .gap-section {
+    gap: 3rem;
+  }
+}
+
+.mb-section {
+  margin-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+  .mb-section {
+    margin-bottom: 4rem;
+  }
+}
+
+/* ============================================
+   BUTTON STYLES
+   ============================================ */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: white;
+  border: none;
   cursor: pointer;
-  transition: border-color 0.25s;
-  border-radius: 8px;
-  border: 1px solid transparent;
+  transition: all var(--transition-base);
+  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3);
 }
 
-button:hover {
-  border-color: #22c55e;
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
 }
 
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.btn-primary:active {
+  transform: translateY(0);
 }
 
-/* Light mode adjustments */
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* ============================================
+   CARD BASE STYLES
+   ============================================ */
+.card-base {
+  background: white;
+  border-radius: 1rem;
+  border: 1px solid #e2e8f0;
+  padding: 1.5rem;
+  transition: all var(--transition-base);
+}
+
+@media (min-width: 768px) {
+  .card-base {
+    padding: 2rem;
   }
+}
 
-  button {
-    background-color: #f9f9f9;
-  }
+/* ============================================
+   IMPROVED FORM ELEMENTS
+   ============================================ */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #22c55e;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(34, 197, 94, 0.4);
+  transition: all var(--transition-fast);
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 3px 10px rgba(34, 197, 94, 0.5);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #22c55e;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 6px rgba(34, 197, 94, 0.4);
 }

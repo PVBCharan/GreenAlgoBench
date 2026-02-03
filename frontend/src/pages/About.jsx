@@ -1,47 +1,112 @@
 // About.jsx
+// About page with project information and proper spacing
+import { motion } from 'framer-motion'
+import { Leaf, Target, Users, Code, Heart } from 'lucide-react'
+import AnimatedSection, { StaggerContainer, StaggerItem } from '@/components/ui/AnimatedSection'
+import Card from '@/components/ui/Card'
+
+const values = [
+  {
+    icon: Leaf,
+    title: 'Sustainability First',
+    description: 'Every optimization decision is guided by environmental impact.',
+  },
+  {
+    icon: Target,
+    title: 'Accuracy',
+    description: 'Precise measurements using industry-standard profiling tools.',
+  },
+  {
+    icon: Code,
+    title: 'Developer-Friendly',
+    description: 'Easy to understand metrics that help you make better decisions.',
+  },
+  {
+    icon: Users,
+    title: 'Community-Driven',
+    description: 'Open source and built for developers by developers.',
+  },
+]
+
 export default function About() {
   return (
-    <div className="max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold text-slate-900 mb-8 text-center">Methodology & About</h1>
-      
-      <div className="space-y-12">
-        <section>
-          <h2 className="text-2xl font-bold text-green-700 mb-4">How We Measure Energy</h2>
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 prose prose-slate max-w-none">
-            <p className="mb-4">
-              GreenAlgoBench uses a combination of hardware counters (RAPL on Intel/AMD) and software-based estimation models to calculate energy consumption.
-            </p>
-            <ul className="list-disc pl-5 space-y-2 text-slate-700">
-              <li><strong>CPU Power:</strong> Measured directly where possible, or estimated based on load.</li>
-              <li><strong>DRAM Power:</strong> Estimated based on memory read/write operations.</li>
-              <li><strong>Carbon Intensity:</strong> Converted from Energy (kWh) to CO₂ (g) using regional grid intensity data (defaulting to global average of 475 gCO₂/kWh).</li>
-            </ul>
-          </div>
-        </section>
+    <div className="min-h-screen bg-slate-50">
+      {/* Header */}
+      <div className="bg-gradient-hero py-24 px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="w-24 h-24 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-xl"
+          >
+            <Leaf className="w-12 h-12 text-white" />
+          </motion.div>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-5xl font-bold text-white mb-6"
+          >
+            About GreenAlgoBench
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed"
+          >
+            Making software development sustainable, one algorithm at a time.
+          </motion.p>
+        </div>
+      </div>
 
-        <section>
-          <h2 className="text-2xl font-bold text-blue-700 mb-4">Optimization Logic</h2>
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 prose prose-slate max-w-none">
-            <p>
-              Our "Quantum-Inspired" optimization uses a heuristic search algorithm inspired by quantum annealing. It explores the configuration space of algorithm parameters to find a global minimum for the cost function:
+      <div className="max-w-4xl mx-auto px-6 py-20">
+        {/* Mission */}
+        <AnimatedSection className="mb-20">
+          <Card className="text-center p-12">
+            <h2 className="text-3xl font-bold text-slate-900 mb-6">Our Mission</h2>
+            <p className="text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
+              GreenAlgoBench helps developers understand and reduce the environmental impact
+              of their code. By measuring energy consumption and carbon emissions of different
+              algorithms, we empower you to make informed decisions that benefit both
+              performance and the planet.
             </p>
-            <div className="bg-slate-100 p-4 rounded-lg font-mono text-sm my-4 text-center">
-              Cost = α * NormalizedTime + β * NormalizedEnergy
-            </div>
-            <p>
-              By adjusting α and β, users can prioritize speed or energy efficiency according to their needs.
-            </p>
-          </div>
-        </section>
+          </Card>
+        </AnimatedSection>
 
-        <section>
-          <h2 className="text-2xl font-bold text-slate-700 mb-4">Limitations</h2>
-          <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 text-slate-600">
-            <p>
-              This platform is a prototype. Energy measurements are estimates and may vary based on background system processes. Carbon intensity is based on static averages and may not reflect real-time grid status.
+        {/* Values */}
+        <AnimatedSection className="mb-20">
+          <h2 className="text-3xl font-bold text-slate-900 text-center mb-12">Our Values</h2>
+          <StaggerContainer className="grid md:grid-cols-2 gap-8">
+            {values.map(({ icon: Icon, title, description }) => (
+              <StaggerItem key={title}>
+                <Card hover glow className="h-full">
+                  <div className="flex items-start gap-5">
+                    <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-7 h-7 text-green-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-slate-900 text-lg mb-2">{title}</h3>
+                      <p className="text-slate-600 leading-relaxed">{description}</p>
+                    </div>
+                  </div>
+                </Card>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+        </AnimatedSection>
+
+        {/* Team Note */}
+        <AnimatedSection>
+          <div className="text-center bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-12">
+            <Heart className="w-14 h-14 text-green-500 mx-auto mb-6" />
+            <h3 className="text-2xl font-bold text-slate-900 mb-4">Built with Care</h3>
+            <p className="text-slate-600 max-w-xl mx-auto leading-relaxed text-lg">
+              GreenAlgoBench is a hackathon project focused on promoting sustainable software development
+              and helping developers make environmentally conscious decisions.
             </p>
           </div>
-        </section>
+        </AnimatedSection>
       </div>
     </div>
   )

@@ -2,6 +2,7 @@
  * Benchmark Service
  * 
  * API calls for running algorithm benchmarks and retrieving results.
+ * Connects to FastAPI backend on port 8000.
  */
 
 import api from './api'
@@ -11,7 +12,7 @@ import api from './api'
  * @returns {Promise} Benchmark status and available algorithms
  */
 export const getBenchmarkStatus = async () => {
-  return api.get('/benchmark/status')
+  return api.get('/api/benchmark/status')
 }
 
 /**
@@ -21,10 +22,20 @@ export const getBenchmarkStatus = async () => {
  * @returns {Promise} Benchmark results for each algorithm
  */
 export const runBenchmark = async (algorithms = null, dataset_size = 1000) => {
-  return api.post('/benchmark', {
-    algorithms,
-    dataset_size,
+  return api.post('/api/benchmark', null, {
+    params: {
+      algorithms: algorithms ? algorithms.join(',') : null,
+      dataset_size,
+    }
   })
+}
+
+/**
+ * Run quick analysis (fast, uses sample/cached data)
+ * @returns {Promise} Quick analysis results
+ */
+export const getQuickAnalysis = async () => {
+  return api.get('/api/analyze/quick')
 }
 
 /**
@@ -32,7 +43,7 @@ export const runBenchmark = async (algorithms = null, dataset_size = 1000) => {
  * @returns {Promise} Latest benchmark data
  */
 export const getBenchmarkResults = async () => {
-  return api.get('/benchmark/results')
+  return api.get('/api/benchmark/results')
 }
 
 /**
@@ -42,8 +53,7 @@ export const getBenchmarkResults = async () => {
  * @returns {Promise} Comparative analysis
  */
 export const compareBenchmarks = async (algorithm_1, algorithm_2) => {
-  return api.post('/benchmark/compare', {
-    algorithm_1,
-    algorithm_2,
+  return api.post('/api/benchmark/compare', null, {
+    params: { algorithm_1, algorithm_2 }
   })
 }

@@ -1,312 +1,261 @@
-// Landing.jsx
-// Landing page for GreenAlgoBench - Carbon-Aware Algorithm Optimization Platform
-// Contains: Hero, System Footprint Card, Educational Content, Comparison, and CTA sections
-
+// Landing.jsx - Clean, polished home page with proper spacing
 import { Link } from 'react-router-dom'
-import { useState, useEffect } from 'react'
-import api from '@/services/api'
+import { motion } from 'framer-motion'
+import { Zap, Leaf, BarChart3, Cpu, TrendingDown, ArrowRight, Check, Globe } from 'lucide-react'
+import AnimatedSection, { StaggerContainer, StaggerItem } from '@/components/ui/AnimatedSection'
+import Card from '@/components/ui/Card'
+import Button from '@/components/ui/Button'
+
+// Feature data with fixed color classes
+const features = [
+  {
+    icon: Cpu,
+    title: 'Real-Time Metrics',
+    description: 'Monitor CPU, memory, and energy consumption as your algorithms execute.',
+    iconBg: 'bg-blue-100',
+    iconColor: 'text-blue-600',
+  },
+  {
+    icon: TrendingDown,
+    title: 'Carbon Estimation',
+    description: 'Calculate CO₂ emissions based on energy usage and grid intensity.',
+    iconBg: 'bg-green-100',
+    iconColor: 'text-green-600',
+  },
+  {
+    icon: BarChart3,
+    title: 'Compare Algorithms',
+    description: 'Side-by-side comparison to find the most efficient solution.',
+    iconBg: 'bg-purple-100',
+    iconColor: 'text-purple-600',
+  },
+  {
+    icon: Leaf,
+    title: 'Optimization Tips',
+    description: 'Get actionable recommendations to reduce your code\'s footprint.',
+    iconBg: 'bg-amber-100',
+    iconColor: 'text-amber-600',
+  },
+]
+
+// How it works steps
+const steps = [
+  { step: '01', title: 'Select Algorithms', description: 'Choose from common sorting and data structure algorithms.' },
+  { step: '02', title: 'Run Analysis', description: 'Execute benchmarks and collect performance metrics.' },
+  { step: '03', title: 'Compare Results', description: 'View detailed comparisons and identify the greenest option.' },
+]
+
+// Stats
+const stats = [
+  { value: '40%', label: 'Avg. Energy Savings' },
+  { value: '100+', label: 'Algorithms Analyzed' },
+  { value: '50g', label: 'CO₂ Saved Per Run' },
+]
 
 export default function Landing() {
-  // State for system footprint data
-  const [footprint, setFootprint] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  // Fetch system footprint data on component mount
-  useEffect(() => {
-    const fetchSystemFootprint = async () => {
-      try {
-        setLoading(true)
-        setError(null)
-        const data = await api.get('/system-footprint')
-        setFootprint(data)
-      } catch (err) {
-        console.error('Failed to fetch system footprint:', err)
-        setError('Unable to load system footprint data. Please refresh the page.')
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchSystemFootprint()
-  }, [])
-
   return (
-    <div className="w-full bg-white">
-      {/* ============================================
-          SECTION 1: HERO SECTION
-          Full-width hero with gradient background,
-          headline, subheading, and two CTA buttons
-          ============================================ */}
-      <section className="w-full bg-slate-900 py-24 md:py-32 text-center relative overflow-hidden rounded-3xl my-6 mx-auto max-w-[95%] shadow-2xl ring-1 ring-slate-800">
-        {/* Background Gradient Effect */}
-        <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 via-slate-900 to-blue-600/10 pointer-events-none"></div>
-        
-        <div className="relative z-10 max-w-7xl mx-auto px-6">
-          {/* Main headline - draws attention to the problem */}
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight tracking-tight drop-shadow-sm">
-            Your Software Has a <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-300">Carbon Footprint</span>
-          </h1>
+    <div className="w-full">
+      {/* HERO SECTION */}
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        {/* Background blobs */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-green-500/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+        </div>
 
-          {/* Subheading - explains the solution */}
-          <p className="text-xl md:text-2xl text-slate-300 mb-12 max-w-3xl mx-auto leading-relaxed font-light">
-            Every application you run consumes energy. Green algorithms help reduce it.
-          </p>
+        <div className="relative z-10 max-w-5xl mx-auto px-6 py-20 text-center">
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 border border-green-500/30 rounded-full text-green-400 text-sm font-medium mb-8"
+          >
+            <Leaf className="w-4 h-4" />
+            Carbon-Aware Computing
+          </motion.div>
 
-          {/* CTA Buttons - primary actions for users */}
-          <div className="flex flex-col sm:flex-row gap-5 justify-center items-center pt-4">
-            <Link
-              to="/run-benchmark"
-              className="px-8 py-4 bg-green-600 text-white font-semibold rounded-lg shadow-lg hover:bg-green-500 hover:shadow-green-500/25 hover:scale-[1.02] transition-all duration-200 text-lg flex items-center gap-2"
-            >
-              <span>⚡</span> Estimate Footprint
+          {/* Headline */}
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-8"
+          >
+            Your Code Has a{' '}
+            <span className="text-green-400">Carbon Footprint</span>
+          </motion.h1>
+
+          {/* Subheadline */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-lg md:text-xl text-slate-300 mb-12 max-w-2xl mx-auto leading-relaxed"
+          >
+            Measure, compare, and optimize the environmental impact of your algorithms.
+          </motion.p>
+
+          {/* CTA Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
+          >
+            <Link to="/analyzer">
+              <Button size="lg" icon={<Zap className="w-5 h-5" />}>
+                Start Analyzing
+              </Button>
             </Link>
-            <Link
-              to="/optimization"
-              className="px-8 py-4 bg-slate-800 text-white font-semibold rounded-lg shadow-lg border border-slate-700 hover:bg-slate-700 hover:border-slate-600 hover:scale-[1.02] transition-all duration-200 text-lg"
-            >
-              Optimize Algorithms
+            <Link to="/about">
+              <Button variant="secondary" size="lg">
+                Learn More <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
             </Link>
-          </div>
+          </motion.div>
+
+          {/* Stats */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="grid grid-cols-3 gap-8 max-w-lg mx-auto"
+          >
+            {stats.map(({ value, label }) => (
+              <div key={label} className="text-center">
+                <div className="text-2xl md:text-4xl font-bold text-white mb-1">{value}</div>
+                <div className="text-xs md:text-sm text-slate-400">{label}</div>
+              </div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
-      {/* ============================================
-          SECTION 2: SYSTEM CARBON FOOTPRINT CARD
-          Displays real system metrics from backend
-          or loading/error states
-          ============================================ */}
-      <section className="w-full py-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="bg-slate-900 rounded-xl shadow-lg p-8 md:p-12 border border-slate-800">
-            {/* Card title */}
-            <h2 className="text-3xl md:text-4xl font-bold text-green-400 mb-12 text-center">
-              Estimated System Carbon Footprint
+      {/* FEATURES SECTION */}
+      <section className="py-24 px-6 bg-white">
+        <div className="max-w-5xl mx-auto">
+          <AnimatedSection className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
+              Why Green Algorithms Matter
             </h2>
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+              Every line of code consumes energy. Optimize to reduce emissions and build sustainable software.
+            </p>
+          </AnimatedSection>
 
-            {/* Show loading state */}
-            {loading && (
-              <div className="text-center py-16">
-                <div className="inline-block">
-                  <div className="animate-spin rounded-full h-16 w-16 border-4 border-green-200 border-t-green-600"></div>
+          <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {features.map(({ icon: Icon, title, description, iconBg, iconColor }) => (
+              <StaggerItem key={title}>
+                <Card hover className="h-full">
+                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-5 ${iconBg}`}>
+                    <Icon className={`w-7 h-7 ${iconColor}`} />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-3">{title}</h3>
+                  <p className="text-slate-600 text-sm leading-relaxed">{description}</p>
+                </Card>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section className="py-24 px-6 bg-slate-50">
+        <div className="max-w-5xl mx-auto">
+          <AnimatedSection className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">How It Works</h2>
+            <p className="text-lg text-slate-600 max-w-xl mx-auto">Three simple steps to optimize your code</p>
+          </AnimatedSection>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {steps.map(({ step, title, description }, idx) => (
+              <AnimatedSection key={step} delay={idx * 0.15}>
+                <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-200 h-full">
+                  <div className="w-14 h-14 bg-green-600 rounded-xl flex items-center justify-center text-white font-bold text-lg mb-6">
+                    {step}
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900 mb-3">{title}</h3>
+                  <p className="text-slate-600 leading-relaxed">{description}</p>
                 </div>
-                <p className="mt-6 text-gray-600 text-lg">Loading system footprint data...</p>
-              </div>
-            )}
-
-            {/* Show error state */}
-            {error && (
-              <div className="bg-red-50 border-2 border-red-300 rounded-xl p-8 mb-8 text-center">
-                <p className="text-red-800 text-lg">{error}</p>
-              </div>
-            )}
-
-            {/* Metrics grid - displays real values from API */}
-            {!loading && footprint && (
-              <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
-                  {/* CPU Usage */}
-                  <div className="bg-slate-800 rounded-lg p-6 text-center flex flex-col items-center hover:bg-slate-700 transition-colors duration-200">
-                    <div className="text-3xl md:text-4xl font-bold text-blue-300 mb-2">
-                      {footprint.cpu_percent?.toFixed(1) || '—'}%
-                    </div>
-                    <div className="text-sm text-slate-400 font-semibold uppercase tracking-wide">CPU Usage</div>
-                  </div>
-
-                  {/* Memory Usage */}
-                  <div className="bg-slate-800 rounded-lg p-6 text-center flex flex-col items-center hover:bg-slate-700 transition-colors duration-200">
-                    <div className="text-3xl md:text-4xl font-bold text-purple-300 mb-2">
-                      {footprint.memory_used_gb?.toFixed(1) || '—'} GB
-                    </div>
-                    <div className="text-sm text-slate-400 font-semibold uppercase tracking-wide">Memory Usage</div>
-                  </div>
-
-                  {/* Estimated Energy */}
-                  <div className="bg-slate-800 rounded-lg p-6 text-center flex flex-col items-center hover:bg-slate-700 transition-colors duration-200">
-                    <div className="text-3xl md:text-4xl font-bold text-amber-300 mb-2">
-                      {footprint.energy_kwh?.toFixed(4) || '—'} kWh
-                    </div>
-                    <div className="text-sm text-slate-400 font-semibold uppercase tracking-wide">Energy Today</div>
-                  </div>
-
-                  {/* Estimated Carbon */}
-                  <div className="bg-slate-800 rounded-lg p-6 text-center flex flex-col items-center hover:bg-slate-700 transition-colors duration-200">
-                    <div className="text-3xl md:text-4xl font-bold text-green-300 mb-2">
-                      {footprint.carbon_kg_per_hour?.toFixed(4) || '—'} kg
-                    </div>
-                    <div className="text-sm text-slate-400 font-semibold uppercase tracking-wide">CO₂ Emissions</div>
-                  </div>
-                </div>
-
-                {/* Disclaimer note */}
-                <div className="pt-6 text-center">
-                  <p className="text-slate-500 text-xs">
-                    Last updated: {footprint.timestamp ? new Date(footprint.timestamp).toLocaleTimeString() : 'just now'}
-                  </p>
-                </div>
-              </>
-            )}
-
-            {/* Fallback if data is not available */}
-            {!loading && !footprint && !error && (
-              <div className="text-center text-slate-500 py-16">
-                <p className="text-lg">No system data available</p>
-              </div>
-            )}
+              </AnimatedSection>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ============================================
-          SECTION 3: WHAT IS A CARBON FOOTPRINT
-          Educational content explaining the concept
-          in simple, non-technical language
-          ============================================ */}
-      <section className="w-full py-24 bg-white">
-        <div className="max-w-3xl mx-auto px-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-12 text-center">
-            What Is a Carbon Footprint?
-          </h2>
+      {/* COMPARISON SECTION */}
+      <section className="py-24 px-6 bg-slate-900">
+        <div className="max-w-5xl mx-auto">
+          <AnimatedSection className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              Traditional vs. Green
+            </h2>
+            <p className="text-lg text-slate-400">See the difference in approach</p>
+          </AnimatedSection>
 
-          {/* Explanatory paragraphs - kept simple for general audience */}
-          <div className="space-y-8 text-slate-700 text-lg leading-relaxed">
-            <div className="flex gap-6 items-start p-4 hover:bg-slate-50 rounded-lg transition-colors duration-200">
-              <div className="text-4xl flex-shrink-0">⚡</div>
-              <p>
-                <span className="font-bold text-slate-900">Every digital action uses energy.</span> When you run
-                software, stream a video, or browse the web, your device consumes electricity. This electricity
-                often comes from power plants that burn fossil fuels, releasing carbon dioxide (CO₂) into the atmosphere.
-              </p>
-            </div>
-
-            <div className="flex gap-6 items-start p-4 hover:bg-slate-50 rounded-lg transition-colors duration-200">
-              <div className="text-4xl flex-shrink-0">⚙️</div>
-              <p>
-                <span className="font-bold text-slate-900">Inefficient software wastes energy.</span> Poorly
-                optimized algorithms make your CPU and memory work harder than necessary. This means more electricity
-                is consumed, more heat is generated, and more carbon emissions are produced — all without giving
-                you any extra benefit.
-              </p>
-            </div>
-
-            <div className="flex gap-6 items-start p-4 hover:bg-slate-50 rounded-lg transition-colors duration-200">
-              <div className="text-4xl flex-shrink-0">🌍</div>
-              <p>
-                <span className="font-bold text-slate-900">Small changes add up.</span> While a single program's
-                impact might seem tiny, millions of devices running inefficient code every day create a massive
-                environmental footprint. By choosing greener algorithms, developers can significantly reduce the
-                tech industry's carbon emissions.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================
-          SECTION 4: WHY GREEN ALGORITHMS MATTER
-          Two-column comparison of traditional vs
-          green algorithms (stacked on mobile)
-          ============================================ */}
-      <section className="w-full py-24 bg-slate-950">
-        <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-12 text-center">
-            Why Green Algorithms Matter
-          </h2>
-
-          {/* Comparison grid - two columns on desktop, stacked on mobile */}
           <div className="grid md:grid-cols-2 gap-8">
-            {/* Traditional Algorithms Column */}
-            <div className="bg-slate-900 rounded-xl p-8 shadow-lg border border-slate-800 hover:shadow-xl hover:scale-[1.01] transition-all duration-300 flex flex-col gap-4 group">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-14 h-14 bg-red-900/30 text-red-400 rounded-full flex items-center justify-center flex-shrink-0 border border-red-900/50">
-                  <span className="text-2xl">🔥</span>
-                </div>
-                <h3 className="text-2xl font-bold text-white group-hover:text-red-400 transition-colors">Traditional Code</h3>
+            {/* Traditional */}
+            <AnimatedSection>
+              <div className="bg-slate-800 rounded-2xl p-8 border border-slate-700 h-full">
+                <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                  <span className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center">
+                    <span className="text-red-400 text-xl">⚡</span>
+                  </span>
+                  Traditional Code
+                </h3>
+                <ul className="space-y-4 text-slate-300">
+                  {['Speed-only optimization', 'No energy awareness', 'Ignores carbon impact'].map(item => (
+                    <li key={item} className="flex items-center gap-3">
+                      <span className="text-red-400 text-lg">✕</span> {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
+            </AnimatedSection>
 
-              <ul className="space-y-6">
-                <li className="flex items-start gap-4">
-                  <span className="text-red-500 text-xl flex-shrink-0 mt-1">✕</span>
-                  <span className="text-slate-300 text-lg">Optimized for <strong>speed only</strong></span>
-                </li>
-                <li className="flex items-start gap-4">
-                  <span className="text-red-500 text-xl flex-shrink-0 mt-1">✕</span>
-                  <span className="text-slate-300 text-lg">No awareness of <strong>energy consumption</strong></span>
-                </li>
-                <li className="flex items-start gap-4">
-                  <span className="text-red-500 text-xl flex-shrink-0 mt-1">✕</span>
-                  <span className="text-slate-300 text-lg">Ignores <strong>carbon impact</strong> of decisions</span>
-                </li>
-                <li className="flex items-start gap-4">
-                  <span className="text-red-500 text-xl flex-shrink-0 mt-1">✕</span>
-                  <span className="text-slate-300 text-lg">May use <strong>excessive resources</strong></span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Green Algorithms Column */}
-            <div className="bg-slate-900 rounded-xl p-8 shadow-lg border border-slate-800 hover:shadow-green-900/20 hover:scale-[1.01] transition-all duration-300 flex flex-col gap-4 group">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-14 h-14 bg-green-900/30 text-green-400 rounded-full flex items-center justify-center flex-shrink-0 border border-green-900/50">
-                  <span className="text-2xl">🌱</span>
-                </div>
-                <h3 className="text-2xl font-bold text-white group-hover:text-green-400 transition-colors">Green Algorithms</h3>
+            {/* Green */}
+            <AnimatedSection delay={0.15}>
+              <div className="bg-green-900/30 rounded-2xl p-8 border border-green-700/50 h-full">
+                <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                  <span className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center">
+                    <Leaf className="w-6 h-6 text-green-400" />
+                  </span>
+                  Green Algorithms
+                </h3>
+                <ul className="space-y-4 text-slate-300">
+                  {['Balanced speed & efficiency', 'Monitors power usage', 'Carbon-aware decisions'].map(item => (
+                    <li key={item} className="flex items-center gap-3">
+                      <Check className="w-5 h-5 text-green-400" /> {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
-
-              <ul className="space-y-6">
-                <li className="flex items-start gap-4">
-                  <span className="text-green-500 text-xl flex-shrink-0 mt-1">✓</span>
-                  <span className="text-slate-300 text-lg">Balanced for <strong>speed + efficiency</strong></span>
-                </li>
-                <li className="flex items-start gap-4">
-                  <span className="text-green-500 text-xl flex-shrink-0 mt-1">✓</span>
-                  <span className="text-slate-300 text-lg">Actively <strong>monitors power usage</strong></span>
-                </li>
-                <li className="flex items-start gap-4">
-                  <span className="text-green-500 text-xl flex-shrink-0 mt-1">✓</span>
-                  <span className="text-slate-300 text-lg">Makes <strong>carbon-aware decisions</strong></span>
-                </li>
-                <li className="flex items-start gap-4">
-                  <span className="text-green-500 text-xl flex-shrink-0 mt-1">✓</span>
-                  <span className="text-slate-300 text-lg">Optimizes for <strong>minimal resource usage</strong></span>
-                </li>
-              </ul>
-            </div>
+            </AnimatedSection>
           </div>
         </div>
       </section>
 
-      {/* ============================================
-          SECTION 5: CALL TO ACTION
-          Highlighted section encouraging users to
-          take action with two primary buttons
-          ============================================ */}
-      <section className="w-full py-24 bg-gradient-to-r from-emerald-600 to-green-600">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          {/* CTA Headline */}
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
-            Ready to Reduce the Carbon Footprint of Your Code?
-          </h2>
-
-          <p className="text-xl md:text-2xl text-white/95 mb-14 max-w-3xl mx-auto font-light">
-            Start measuring and optimizing your software's environmental impact today.
-          </p>
-
-          {/* Action buttons */}
-          <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
-            <Link
-              to="/run-benchmark"
-              className="px-10 py-4 bg-white text-green-700 font-semibold rounded-xl shadow-xl hover:bg-green-50 hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 text-lg w-full sm:w-auto"
-            >
-              Run Benchmark
+      {/* CTA SECTION */}
+      <section className="py-24 px-6 bg-green-600">
+        <div className="max-w-3xl mx-auto text-center">
+          <AnimatedSection>
+            <Globe className="w-16 h-16 text-white/80 mx-auto mb-6" />
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              Ready to Reduce Your Carbon Footprint?
+            </h2>
+            <p className="text-lg text-white/90 mb-10 max-w-xl mx-auto leading-relaxed">
+              Start measuring and optimizing today. Make your code sustainable.
+            </p>
+            <Link to="/analyzer">
+              <Button
+                className="bg-white text-green-700 hover:bg-green-50 shadow-lg"
+                size="lg"
+                icon={<Zap className="w-5 h-5" />}
+              >
+                Run Your First Analysis
+              </Button>
             </Link>
-            <Link
-              to="/dashboard"
-              className="px-10 py-4 bg-transparent border-2 border-white text-white font-semibold rounded-xl hover:bg-white/10 hover:shadow-lg hover:scale-[1.02] transition-all duration-300 text-lg w-full sm:w-auto"
-            >
-              View Dashboard
-            </Link>
-          </div>
+          </AnimatedSection>
         </div>
       </section>
     </div>
