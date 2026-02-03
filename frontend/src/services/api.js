@@ -9,7 +9,7 @@ import axios from 'axios'
 
 // Create Axios instance with default configuration
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080',
+  baseURL: import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:8080' : 'https://green-algo-bench.onrender.com'),
   headers: {
     'Content-Type': 'application/json',
   },
