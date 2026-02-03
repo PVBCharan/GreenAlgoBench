@@ -9,7 +9,7 @@ This application exposes the existing Python logic as REST APIs:
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import system, benchmark, optimize
+from routes import system, benchmark, optimize, analyze
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -36,6 +36,7 @@ app.add_middleware(
 app.include_router(system.router, prefix="/api", tags=["System"])
 app.include_router(benchmark.router, prefix="/api", tags=["Benchmark"])
 app.include_router(optimize.router, prefix="/api", tags=["Optimization"])
+app.include_router(analyze.router, prefix="/api", tags=["Analysis"])
 
 # Health check endpoint
 @app.get("/health")
@@ -62,7 +63,10 @@ async def root():
             "health": "/health",
             "system_footprint": "/api/system-footprint",
             "run_benchmark": "/api/benchmark",
-            "optimize": "/api/optimize"
+            "optimize": "/api/optimize",
+            "analyze": "/api/analyze",
+            "analyze_quick": "/api/analyze/quick",
+            "analyze_status": "/api/analyze/status"
         }
     }
 
