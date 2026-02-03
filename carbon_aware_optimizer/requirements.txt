@@ -1,2 +1,8 @@
-# Python dependencies placeholder
-# Add psutil, scikit-learn, qiskit, streamlit/dash, matplotlib, etc. as needed
+psutil
+scikit-learn
+pandas
+joblib
+numpy
+streamlit
+matplotlib
+pyyaml

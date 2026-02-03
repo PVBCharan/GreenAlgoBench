@@ -23,7 +23,7 @@ def show_dashboard():
 			plt.imshow(image)
 			plt.axis('off')
 			plt.title(img.replace('_', ' ').replace('.png', '').title())
-			plt.show()
+	plt.show()
 	print(f"\nOptimizer's Choice: {best_algo}\nExplanation: {explanation}\n")
 
 if __name__ == "__main__":

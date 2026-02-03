@@ -15,6 +15,11 @@ ALGORITHM_CATEGORIES = {
     "searching": [
         "linear_search", # Basic, sequential search
         "binary_search"  # Efficient, requires sorted data
+    ],
+    # Recursive vs Iterative benchmarks (new category)
+    "recursion": [
+        "fibonacci_recursive",
+        "fibonacci_iterative"
     ]
 }
 
