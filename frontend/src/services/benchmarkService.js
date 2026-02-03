@@ -2,7 +2,7 @@
  * Benchmark Service
  * 
  * API calls for running algorithm benchmarks and retrieving results.
- * Connects to FastAPI backend on port 8000.
+ * Connects to FastAPI backend on port 8080.
  */
 
 import api from './api'
